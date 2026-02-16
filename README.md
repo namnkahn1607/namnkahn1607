@@ -3,9 +3,6 @@
 # 💫 About Me
 ⚡A Computer Science sophomore at UET-VNU, passionate about discovering the realm of application coding and machine learning.
 
-## 🌐 Socials
-[![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/nlnktheprogrammer) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/namnkahn) 
-
 # 💻 Tech Stacks
 ### 🖥️ Language
 <p >
