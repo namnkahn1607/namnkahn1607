@@ -1,7 +1,7 @@
 <h1 align="center"> Hi 👋 I'm Nam Khanh</h1>
 
 # 💫 About Me
-⚡A Computer Science sophomore at UET-VNU, passionate about discovering the realm of application coding and machine learning.
+⚡A Computer Science student at UET-VNU, passionate about discovering the realm of application coding and machine learning.
 
 # 💻 Tech Stacks
 ### 🖥️ Language
