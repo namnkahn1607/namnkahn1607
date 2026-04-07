@@ -32,10 +32,3 @@
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" width="40" height="40" alt=""/>
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" width="40" height="40" alt=""/>
 </p>
-
-# 📈 GitHub Stats
-![](https://github-readme-stats.vercel.app/api?username=namnkahn1607&theme=default&hide_border=true&include_all_commits=true&count_private=false)<br/>
-![](https://nirzak-streak-stats.vercel.app/?user=namnkahn1607&theme=default&hide_border=true)<br/>
-
-## ⏏️ Top Contributed Repo
-![](https://github-contributor-stats.vercel.app/api?username=namnkahn1607&limit=5&theme=default&combine_all_yearly_contributions=true)
