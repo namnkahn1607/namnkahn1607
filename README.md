@@ -3,3 +3,4 @@
 - 🚀 I'm passionate about system architecture and engineering.
 - 🧩 I’m looking to collaborate on interesting projects.
 - 📫 Feel free to reach out to me at: nlnkandthebois@gmail.com
+> "Dubito ergo cogito, cogito ergo sum."
