@@ -1,0 +1,31 @@
+name: Metrics
+permissions:
+  contents: write
+on:
+  # Schedule weekly updates at 0:00 A.M Sunday
+  schedule: [{ cron: "0 0 * * 0" }]
+  workflow_dispatch:
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip3 install PyYAML
+      - name: Generate metrics
+        env:
+          GITHUB_TOKEN: ${{ secrets.METRICS_TOKEN }}
+        run: |
+          python3 gen.py -u namnkahn1607 -os stats.svg -oa activity.svg
+      - name: Commit and (force) push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B metrics-render
+          git add stats.svg activity.svg
+          git commit -m "build: output SVG metrics"
+          git push -f origin metric-render
