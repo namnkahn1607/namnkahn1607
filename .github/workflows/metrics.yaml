@@ -20,12 +20,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.METRICS_TOKEN }}
         run: |
-          python3 gen.py -u namnkahn1607 -o metrics.svg
+          python3 gen.py -u namnkahn1607 -os stats.svg -oa activity.svg
       - name: Commit and (force) push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -B metrics-render
-          git add metrics.svg
+          git add stats.svg activity.svg
           git commit -m "build: output SVG metrics"
           git push -f origin metrics-render

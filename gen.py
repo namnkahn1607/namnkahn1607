@@ -317,9 +317,9 @@ def main():
         with open(args.output_stats, "w", encoding="utf-8") as f:
             f.write(stats_svg)
 
-        activities_svg = render_activity_svg(activities)
+        activity_svg = render_activity_svg(activities)
         with open(args.output_activity, "w", encoding="utf-8") as f:
-            f.write(activities_svg)
+            f.write(activity_svg)
 
         print(f"Successfully generated {args.output_stats} and {args.output_activity}!")
 
