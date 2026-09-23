@@ -28,4 +28,4 @@ jobs:
           git checkout -B metrics-render
           git add metrics.svg
           git commit -m "build: output SVG metrics"
-          git push -f origin metric-render
+          git push -f origin metrics-render
