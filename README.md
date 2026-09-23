@@ -1,4 +1,10 @@
-## Hi there 👋
+<h2 align="center">👋 Hi, this is namnkahn1607</h2>
+<p align="center">nlnkandthebois@gmail.com</p>
+<p align="center"><em>I build stuffs I found not very cool</em></p>
+<p align="center">
+    <img width="400px" src="https://github.com/namnkahn1607/namnkahn1607/raw/metrics-render/metrics.svg"/>
+</p>
+
 
 <!--
 **namnkahn1607/namnkahn1607** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
