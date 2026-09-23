@@ -251,10 +251,57 @@ def render_stats_svg(langs, colors, stats):
     return "\n".join(svg)
 
 
+def render_activity_svg(activities):
+    W, H = 600, 390
+    svg = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">',
+        '<style>',
+        '  text { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; }',
+        '  .title { font-weight: 600; font-size: 18px; fill: #24292f; }',
+        '  .item-title { font-weight: 600; font-size: 14px; fill: #0969da; }',
+        '  .item-meta { font-size: 13px; fill: #57606a; }',
+        '</style>',
+        '<rect width="100%" height="100%" fill="#ffffff" rx="8" stroke="#e1e4e8" stroke-width="1"/>',
+        '<text x="40" y="45" class="title">Recent Activity</text>'
+    ]
+
+    if not activities:
+        svg.append('<text x="40" y="90" font-size="14" fill="#57606a">No recent public activity found.</text>')
+    else:
+        y_pos = 90
+        for act in activities:
+            is_pr = act["__typename"] == "PullRequest"
+            icon_color = "#8250df" if is_pr else "#1a7f37"
+            type_label = "Pull Request" if is_pr else "Issue"
+            
+            repo_name = act["repository"]["nameWithOwner"]
+            number = act["number"]
+            title = act["title"]
+            
+            # Draw icon (simplified circle for PR/Issue)
+            svg.append(f'<circle cx="45" cy="{y_pos - 4}" r="5" fill="{icon_color}"/>')
+            
+            # Title line: Issue/PR #123 - Title (Truncated if too long)
+            display_title = escape_text(title)
+            if len(display_title) > 55:
+                display_title = display_title[:52] + "..."
+                
+            svg.append(f'<text x="60" y="{y_pos}" class="item-title">#{number} {display_title}</text>')
+            
+            # Meta line: Opened in repo
+            svg.append(f'<text x="60" y="{y_pos + 18}" class="item-meta">Opened {type_label.lower()} in {escape_text(repo_name)}</text>')
+            
+            y_pos += 55
+
+    svg.append('</svg>')
+    return "\n".join(svg)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-u", "--user", default="namnkahn1607")
-    ap.add_argument("-o", "--output-stats", default="metrics.svg")
+    ap.add_argument("-os", "--output-stats", default="stats.svg")
+    ap.add_argument("-oa", "--output-activity", default="activity.svg")
     args = ap.parse_args()
 
     token = os.environ.get("GITHUB_TOKEN")
@@ -264,12 +311,17 @@ def main():
     try:
         langs, colors = fetch_language_stats(args.user, token)
         stats = fetch_contribution_stats(args.user, token)
+        activities = fetch_recent_activity(args.user, token)
 
         stats_svg = render_stats_svg(langs, colors, stats)
         with open(args.output_stats, "w", encoding="utf-8") as f:
             f.write(stats_svg)
 
-        print(f"Successfully generated {args.output_stats}!")
+        activities_svg = render_activity_svg(activities)
+        with open(args.output_activity, "w", encoding="utf-8") as f:
+            f.write(activities_svg)
+
+        print(f"Successfully generated {args.output_stats} and {args.output_activity}!")
 
     except Exception as e:
         sys.exit(f"Runtime execution failed: {str(e)}")
