@@ -2,8 +2,8 @@
 <p align="center">nlnkandthebois@gmail.com</p>
 <p align="center"><em>I build stuffs I found not very cool</em></p>
 <p align="center">
-    <img width="480px" src="https://github.com/namnkahn1607/namnkahn1607/raw/metrics-render/stats.svg"/>
-    <img width="480px" src="https://github.com/namnkahn1607/namnkahn1607/raw/metrics-render/activity.svg"/>
+    <img width="400px" src="https://github.com/namnkahn1607/namnkahn1607/raw/metrics-render/stats.svg"/>
+    <img width="400px" src="https://github.com/namnkahn1607/namnkahn1607/raw/metrics-render/activity.svg"/>
 </p>
 
 
