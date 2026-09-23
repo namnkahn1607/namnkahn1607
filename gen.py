@@ -21,7 +21,6 @@ def get_cache(key):
                     return json.load(f)
             except json.JSONDecodeError:
                 pass  # Fallback to network on corrupted cache
-
     return None
 
 
@@ -204,11 +203,11 @@ def render_stats_svg(langs, colors, stats):
     svg = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">',
         '<style>text { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; }</style>',
-        '<rect width="100%" height="100%" fill="#ffffff" rx="8" stroke="#e1e4e8" stroke-width="1"/>'
+        '<rect width="100%" height="100%" fill="#ffffff" rx="8" stroke="none"/>'
     ]
     
     # 1. Languages Section
-    svg.append(f'<text x="40" y="45" font-size="18" font-weight="600" fill="#24292f">Most Used Languages</text>')
+    svg.append(f'<text x="40" y="45" font-size="18" font-weight="400" fill="#0969da">Most Used Languages</text>')
     
     y_pos = 80
     for i, (lang, n) in enumerate(top_langs):
@@ -225,10 +224,10 @@ def render_stats_svg(langs, colors, stats):
 
     # 2. Issues & PRs Section
     issues, prs = stats["issues"], stats["prs"]
-    svg.append(f'<text x="40" y="215" font-size="18" font-weight="600" fill="#24292f">Contributions Breakdown</text>')
+    svg.append(f'<text x="40" y="215" font-size="18" font-weight="400" fill="#0969da">Overall Issues and Pull Requests Status</text>')
     
     # Issues
-    svg.append(f'<text x="40" y="250" font-size="15" fill="#24292f">Issues</text>')
+    svg.append(f'<text x="40" y="250" font-size="15" fill="#0969da">Issues</text>')
     svg.append(generate_bar(40, 265, 230, 10, [
         ("open", issues["open"], "#1a7f37"),
         ("closed", issues["closed"], "#8250df"),
@@ -237,7 +236,7 @@ def render_stats_svg(langs, colors, stats):
     svg.append(f'<circle cx="150" cy="295" r="4" fill="#8250df"/><text x="160" y="300" font-size="14" fill="#57606a">{issues["closed"]} closed</text>')
 
     # PRs
-    svg.append(f'<text x="320" y="250" font-size="15" fill="#24292f">Pull Requests</text>')
+    svg.append(f'<text x="320" y="250" font-size="15" fill="#0969da">Pull requests</text>')
     svg.append(generate_bar(320, 265, 230, 10, [
         ("open", prs["open"], "#1a7f37"),
         ("merged", prs["merged"], "#8250df"),
@@ -250,18 +249,18 @@ def render_stats_svg(langs, colors, stats):
     svg.append('</svg>')
     return "\n".join(svg)
 
-
 def render_activity_svg(activities):
     W, H = 600, 390
     svg = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">',
         '<style>',
         '  text { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; }',
-        '  .title { font-weight: 600; font-size: 18px; fill: #24292f; }',
-        '  .item-title { font-weight: 600; font-size: 14px; fill: #0969da; }',
+        '  .title { font-weight: 400; font-size: 18px; fill: #0969da; }',
+        '  .item-title { font-size: 14px; fill: #0969da; }',
         '  .item-meta { font-size: 13px; fill: #57606a; }',
+        '  .repo-name { fill: #0969da; }',
         '</style>',
-        '<rect width="100%" height="100%" fill="#ffffff" rx="8" stroke="#e1e4e8" stroke-width="1"/>',
+        '<rect width="100%" height="100%" fill="#ffffff" rx="8" stroke="none"/>',
         '<text x="40" y="45" class="title">Recent Activity</text>'
     ]
 
@@ -271,25 +270,23 @@ def render_activity_svg(activities):
         y_pos = 90
         for act in activities:
             is_pr = act["__typename"] == "PullRequest"
-            icon_color = "#8250df" if is_pr else "#1a7f37"
-            type_label = "Pull Request" if is_pr else "Issue"
             
             repo_name = act["repository"]["nameWithOwner"]
             number = act["number"]
             title = act["title"]
             
-            # Draw icon (simplified circle for PR/Issue)
-            svg.append(f'<circle cx="45" cy="{y_pos - 4}" r="5" fill="{icon_color}"/>')
+            icon_path = "M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25zM4.25 12a.75.75 0 100 1.5.75.75 0 000-1.5zM3.5 3.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0z" if is_pr else "M7.177 3.073L9.573.677A.25.25 0 0110 .854v4.792a.25.25 0 01-.427.177L7.177 3.427a.25.25 0 010-.354zM3.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122v5.256a2.251 2.251 0 11-1.5 0V5.372A2.25 2.25 0 011.5 3.25zM11 2.5h-1V4h1a1 1 0 011 1v5.628a2.251 2.251 0 101.5 0V5A2.5 2.5 0 0011 2.5zm1 10.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0zM3.75 12a.75.75 0 100 1.5.75.75 0 000-1.5z"
+            svg.append(f'<g transform="translate(38, {y_pos - 12})"><path fill="#57606a" fill-rule="evenodd" d="{icon_path}"/></g>')
             
-            # Title line: Issue/PR #123 - Title (Truncated if too long)
+            # Title line: Opened #123 Title (Truncated if too long)
             display_title = escape_text(title)
             if len(display_title) > 55:
                 display_title = display_title[:52] + "..."
                 
-            svg.append(f'<text x="60" y="{y_pos}" class="item-title">#{number} {display_title}</text>')
+            svg.append(f'<text x="60" y="{y_pos}" class="item-title">Opened #{number} {display_title}</text>')
             
-            # Meta line: Opened in repo
-            svg.append(f'<text x="60" y="{y_pos + 18}" class="item-meta">Opened {type_label.lower()} in {escape_text(repo_name)}</text>')
+            # Meta line: in repo (repo colored blue)
+            svg.append(f'<text x="60" y="{y_pos + 18}" class="item-meta">in <tspan class="repo-name">{escape_text(repo_name)}</tspan></text>')
             
             y_pos += 55
 
