@@ -207,7 +207,7 @@ def render_stats_svg(langs, colors, stats):
     ]
     
     # 1. Languages Section
-    svg.append(f'<text x="40" y="45" font-size="18" font-weight="400" fill="#0969da">Most Used Languages</text>')
+    svg.append(f'<text x="40" y="45" font-size="18" font-weight="400" fill="#0969da">Most Used Languages ({len(langs)} in Total)</text>')
     
     y_pos = 80
     for i, (lang, n) in enumerate(top_langs):
@@ -221,34 +221,37 @@ def render_stats_svg(langs, colors, stats):
         svg.append(f'<text x="{220 + dx}" y="{y_pos}" font-size="14" fill="#57606a" text-anchor="end">{pct:.1f}%</text>')
         
         if i % 2 != 0: y_pos += dy
-
+ 
     # 2. Issues & PRs Section
     issues, prs = stats["issues"], stats["prs"]
     svg.append(f'<text x="40" y="215" font-size="18" font-weight="400" fill="#0969da">Overall Issues and Pull Requests Status</text>')
     
     # Issues
-    svg.append(f'<text x="40" y="250" font-size="15" fill="#0969da">Issues</text>')
+    svg.append(f'<text x="155" y="250" font-size="15" fill="#0969da" text-anchor="middle">Issues</text>')
     svg.append(generate_bar(40, 265, 230, 10, [
         ("open", issues["open"], "#1a7f37"),
         ("closed", issues["closed"], "#8250df"),
     ]))
     svg.append(f'<circle cx="45" cy="295" r="4" fill="#1a7f37"/><text x="55" y="300" font-size="14" fill="#57606a">{issues["open"]} open</text>')
     svg.append(f'<circle cx="150" cy="295" r="4" fill="#8250df"/><text x="160" y="300" font-size="14" fill="#57606a">{issues["closed"]} closed</text>')
-
+    svg.append(f'<circle cx="45" cy="320" r="4" fill="none" stroke="#8c959f" stroke-width="1.5"/><text x="55" y="325" font-size="14" fill="#57606a">0 drafts</text>')
+    svg.append(f'<circle cx="150" cy="320" r="4" fill="none" stroke="#8c959f" stroke-width="1.5"/><text x="160" y="325" font-size="14" fill="#57606a">0 skipped</text>')
+ 
     # PRs
-    svg.append(f'<text x="320" y="250" font-size="15" fill="#0969da">Pull requests</text>')
+    svg.append(f'<text x="435" y="250" font-size="15" fill="#0969da" text-anchor="middle">Pull requests</text>')
     svg.append(generate_bar(320, 265, 230, 10, [
         ("open", prs["open"], "#1a7f37"),
         ("merged", prs["merged"], "#8250df"),
         ("closed", prs["closed"], "#d1242f"),
     ]))
     svg.append(f'<circle cx="325" cy="295" r="4" fill="#1a7f37"/><text x="335" y="300" font-size="14" fill="#57606a">{prs["open"]} open</text>')
-    svg.append(f'<circle cx="410" cy="295" r="4" fill="#8250df"/><text x="420" y="300" font-size="14" fill="#57606a">{prs["merged"]} merged</text>')
-    svg.append(f'<circle cx="495" cy="295" r="4" fill="#d1242f"/><text x="505" y="300" font-size="14" fill="#57606a">{prs["closed"]} closed</text>')
-
+    svg.append(f'<circle cx="430" cy="295" r="4" fill="#8250df"/><text x="440" y="300" font-size="14" fill="#57606a">{prs["merged"]} merged</text>')
+    svg.append(f'<circle cx="325" cy="320" r="4" fill="none" stroke="#8c959f" stroke-width="1.5"/><text x="335" y="325" font-size="14" fill="#57606a">0 drafts</text>')
+    svg.append(f'<circle cx="430" cy="320" r="4" fill="#d1242f"/><text x="440" y="325" font-size="14" fill="#57606a">{prs["closed"]} closed</text>')
+ 
     svg.append('</svg>')
     return "\n".join(svg)
-
+ 
 def render_activity_svg(activities):
     W, H = 600, 390
     svg = [
@@ -261,9 +264,13 @@ def render_activity_svg(activities):
         '  .repo-name { fill: #0969da; }',
         '</style>',
         '<rect width="100%" height="100%" fill="#ffffff" rx="8" stroke="none"/>',
-        '<text x="40" y="45" class="title">Recent Activity</text>'
+        '<g transform="translate(38, 30)"><path fill="#57606a" fill-rule="evenodd" '
+        'd="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 '
+        '110-1.5h1.75v-2H4.5a1 1 0 00-1 1v.25a.75.75 0 01-1.5 0v-9.5zm1.5 5.973V2.5a1 1 0 011-1h7.5v6h-7.5c-.354 '
+        '0-.696.06-1 .17z"/></g>',
+        '<text x="60" y="45" class="title">Recent Activity</text>'
     ]
-
+ 
     if not activities:
         svg.append('<text x="40" y="90" font-size="14" fill="#57606a">No recent public activity found.</text>')
     else:
@@ -278,18 +285,16 @@ def render_activity_svg(activities):
             icon_path = "M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25zM4.25 12a.75.75 0 100 1.5.75.75 0 000-1.5zM3.5 3.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0z" if is_pr else "M7.177 3.073L9.573.677A.25.25 0 0110 .854v4.792a.25.25 0 01-.427.177L7.177 3.427a.25.25 0 010-.354zM3.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122v5.256a2.251 2.251 0 11-1.5 0V5.372A2.25 2.25 0 011.5 3.25zM11 2.5h-1V4h1a1 1 0 011 1v5.628a2.251 2.251 0 101.5 0V5A2.5 2.5 0 0011 2.5zm1 10.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0zM3.75 12a.75.75 0 100 1.5.75.75 0 000-1.5z"
             svg.append(f'<g transform="translate(38, {y_pos - 12})"><path fill="#57606a" fill-rule="evenodd" d="{icon_path}"/></g>')
             
-            # Title line: Opened #123 Title (Truncated if too long)
             display_title = escape_text(title)
-            if len(display_title) > 55:
-                display_title = display_title[:52] + "..."
+            if len(display_title) > 78:
+                display_title = display_title[:75] + "..."
                 
             svg.append(f'<text x="60" y="{y_pos}" class="item-title">Opened #{number} {display_title}</text>')
             
-            # Meta line: in repo (repo colored blue)
             svg.append(f'<text x="60" y="{y_pos + 18}" class="item-meta">in <tspan class="repo-name">{escape_text(repo_name)}</tspan></text>')
             
             y_pos += 55
-
+ 
     svg.append('</svg>')
     return "\n".join(svg)
 
